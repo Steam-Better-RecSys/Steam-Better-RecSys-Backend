@@ -12,7 +12,7 @@ def get_home():
 
 @app.get('/recommendations')
 def get_recommendations(game_id: int):
-    return requests.get('https://ml:80/recommendations', params={'game_id': game_id})
+    return {"response": requests.get('http://ml:8000/recommendations', params={'game_id': game_id}).json()['items']}
 
 
 if __name__ == "__main__":

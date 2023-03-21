@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  backend:
+    restart: always
+    build: ./app
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    volumes:
+      - ./app:/app
+    ports:
+      - "8081:8080"
+  ml:
+    restart: always
+    build: ../Steam-Better-RecSys-ML/app
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    volumes:
+      - ../Steam-Better-RecSys-ML/app:/app
+    ports:
+      - "8080:8080"

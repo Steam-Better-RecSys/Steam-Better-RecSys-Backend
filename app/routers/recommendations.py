@@ -2,9 +2,9 @@ import requests
 from requests.structures import CaseInsensitiveDict
 from fastapi import APIRouter
 
-from ..config import config_env
+from config import config_env
 
-router = APIRouter(prefix="/recommendations")
+router = APIRouter()
 
 
 @router.get('')

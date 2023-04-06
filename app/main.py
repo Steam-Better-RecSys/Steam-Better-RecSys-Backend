@@ -1,10 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import recommendations
-from .config import config_env
+from db import models
+from db.database import engine
+
+from dependencies import get_db
+
+from config import config_env
+
+from routers import recommendations, games
 
 app = FastAPI()
+
+models.Base.metadata.create_all(bind=engine)
 
 origins = ["*"]
 
@@ -16,7 +24,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(recommendations.router)
+app.include_router(
+    recommendations.router,
+    prefix="/recommendations",
+    tags=["Recommendations"],
+    dependencies=[Depends(get_db)]
+)
+app.include_router(
+    games.router,
+    prefix="/games",
+    tags=["Games"],
+    dependencies=[Depends(get_db)]
+)
 
 
 @app.get('/')

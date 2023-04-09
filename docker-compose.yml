@@ -4,10 +4,15 @@ services:
   backend:
     environment:
       - ML_HOST
+      - SQLALCHEMY_DATABASE_URL
+      - DB_HOST_PATH
+      - GAMES_HEADER_PATH
     restart: always
     build: .
     ports:
       - "3000:3000"
+    volumes:
+      - "${DB_HOST_PATH}:/app/steam.db"
     container_name: backend
   ml:
     restart: always
@@ -15,9 +20,3 @@ services:
     ports:
       - "3001:3000"
     container_name: ml
-  frontend:
-    restart: always
-    build: ../Steam-Better-RecSys-Frontend/vue-Steam-Better-RecSys
-    ports:
-      - "3002:3000"
-    container_name: frontend

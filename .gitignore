@@ -134,6 +134,3 @@ dmypy.json
 
 # MacOS
 .DS_Store
-
-# db
-*.db

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class GameBase(BaseModel):
     game_id: int
     title: str
-    description: str
+    description: Optional[str]
 
 
 class GameCreate(GameBase):

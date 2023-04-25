@@ -19,6 +19,7 @@ class GameRepository {
             relations: {
                 tags: true,
             },
+            take: 100
         })
     }
 

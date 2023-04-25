@@ -27,24 +27,24 @@ export class Game {
     @Column()
     nameSlug: string
 
-    protected verticalImageUrl: string
-
     protected horizontalImageUrl: string
 
-    @AfterLoad()
-    getVerticalImageUrl() {
-        this.verticalImageUrl =
-            'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
-            String(this.gameId) +
-            '/header.jpg'
-    }
+    protected verticalImageUrl: string
 
     @AfterLoad()
     getHorizontalImageUrl() {
         this.horizontalImageUrl =
             'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
             String(this.gameId) +
-            '/hero_capsule.jpg'
+            '/header.jpg'
+    }
+
+    @AfterLoad()
+    getVerticalImageUrl() {
+        this.verticalImageUrl =
+            'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
+            String(this.gameId) +
+            'library_600x900.jpg'
     }
 
     @ManyToMany((type) => Tag, (tag) => tag.games, {

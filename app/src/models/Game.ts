@@ -44,7 +44,7 @@ export class Game {
         this.verticalImageUrl =
             'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
             String(this.gameId) +
-            'library_600x900.jpg'
+            '/library_600x900.jpg'
     }
 
     @ManyToMany((type) => Tag, (tag) => tag.games, {

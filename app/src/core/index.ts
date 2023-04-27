@@ -5,7 +5,7 @@ import users from '../routes/Users'
 import auth from '../routes/Auth'
 import games from '../routes/Games'
 import tags from '../routes/Tags'
-import tagClasses from "../routes/TagClasses";
+import tagClasses from '../routes/TagClasses'
 import { AppDataSource } from '../database/data-source'
 
 class App {

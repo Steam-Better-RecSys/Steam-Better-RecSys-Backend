@@ -1,6 +1,7 @@
 import GameRepository from '../repositories/GameRepo'
 import TagService from './TagService'
 import { Tag } from '../models/Tag'
+import { GameSorting } from '../repositories/ISorting'
 
 const gameRepository = new GameRepository()
 const tagService = new TagService()
@@ -10,8 +11,9 @@ class GameService {
         return gameRepository.readById(id)
     }
 
-    async getAll() {
-        return gameRepository.readAll()
+    async getAll(sortOption: string, directionOption: string) {
+        let gameSorting = new GameSorting(sortOption, directionOption)
+        return gameRepository.readAll(gameSorting)
     }
 
     async getByTags(tagsIds: number[]) {

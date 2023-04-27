@@ -29,6 +29,11 @@ class TagRepository {
             relations: {
                 games: showRelations,
             },
+            order: {
+                games: {
+                    title: 'ASC',
+                },
+            },
             where: { id: In(ids) },
         })
     }

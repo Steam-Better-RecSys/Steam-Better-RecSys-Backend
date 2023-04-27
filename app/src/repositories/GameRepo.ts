@@ -1,6 +1,7 @@
 import { AppDataSource } from '../database/data-source'
 import { Game } from '../models/Game'
 import { Tag } from '../models/Tag'
+import { GameSorting } from './ISorting'
 
 const gameRepository = AppDataSource.getRepository(Game)
 
@@ -14,12 +15,15 @@ class GameRepository {
         })
     }
 
-    async readAll() {
+    async readAll(gameSorting: GameSorting) {
         return await gameRepository.find({
             relations: {
                 tags: true,
             },
-            take: 100
+            order: {
+                [gameSorting.parameter]: gameSorting.direction,
+            },
+            take: 100,
         })
     }
 

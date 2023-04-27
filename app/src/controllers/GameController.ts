@@ -8,12 +8,18 @@ const convertor = new Convertor()
 class GameController {
     getAllGames = async (request: Request, response: Response) => {
         const tagsQuery = request.query.tag
+        const sortQuery = request.query.sort || 'title'
+        const orderQuery = request.query.order || 'ASC'
+
         if (tagsQuery) {
             const tagsIds = convertor.convertQueryToNumbers(tagsQuery)
             const allGames = await gameService.getByTags(tagsIds)
             return response.send(allGames)
         } else {
-            const allGames = await gameService.getAll()
+            const allGames = await gameService.getAll(
+                String(sortQuery),
+                String(orderQuery)
+            )
             return response.send(allGames)
         }
     }

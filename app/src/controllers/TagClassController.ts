@@ -1,4 +1,4 @@
-import { request, Request, Response } from "express";
+import { request, Request, Response } from 'express'
 import TagClassService from '../services/TagClassService'
 
 const tagClassService = new TagClassService()

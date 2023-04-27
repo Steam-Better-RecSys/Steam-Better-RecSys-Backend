@@ -19,7 +19,7 @@ class TagRepository {
         return await tagClassRepository.find({
             relations: {
                 tags: true,
-            }
+            },
         })
     }
 

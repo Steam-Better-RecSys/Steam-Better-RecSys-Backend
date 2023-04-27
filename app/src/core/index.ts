@@ -1,10 +1,12 @@
 import express from 'express'
 import cors = require('cors')
+import cookieParser = require('cookie-parser')
 import { createServer, Server } from 'http'
 import users from '../routes/Users'
 import auth from '../routes/Auth'
 import games from '../routes/Games'
 import tags from '../routes/Tags'
+import recommendations from '../routes/Recommendations'
 import tagClasses from '../routes/TagClasses'
 import { AppDataSource } from '../database/data-source'
 
@@ -27,6 +29,7 @@ class App {
         const app = express()
 
         app.use(cors())
+        app.use(cookieParser())
         app.use(express.urlencoded({ extended: true }))
         app.use(express.json())
 
@@ -35,6 +38,7 @@ class App {
         app.use('/games', games)
         app.use('/tags', tags)
         app.use('/classes', tagClasses)
+        app.use('/recommendations', recommendations)
 
         app.get('/', (request, response) => {
             response.send('{health_check: OK}')

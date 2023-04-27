@@ -10,15 +10,25 @@ class GameController {
         const tagsQuery = request.query.tag
         const sortQuery = request.query.sort || 'title'
         const orderQuery = request.query.order || 'ASC'
+        const limitQuery = request.query.limit || 100
+        const offsetQuery = request.query.offset || 0
 
         if (tagsQuery) {
             const tagsIds = convertor.convertQueryToNumbers(tagsQuery)
-            const allGames = await gameService.getByTags(tagsIds)
+            const allGames = await gameService.getByTags(
+                tagsIds,
+                String(sortQuery),
+                String(orderQuery),
+                Number(limitQuery),
+                Number(offsetQuery)
+            )
             return response.send(allGames)
         } else {
             const allGames = await gameService.getAll(
                 String(sortQuery),
-                String(orderQuery)
+                String(orderQuery),
+                Number(limitQuery),
+                Number(offsetQuery)
             )
             return response.send(allGames)
         }

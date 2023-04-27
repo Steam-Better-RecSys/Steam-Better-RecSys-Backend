@@ -11,23 +11,50 @@ class GameService {
         return gameRepository.readById(id)
     }
 
-    async getAll(sortOption: string, directionOption: string) {
-        let gameSorting = new GameSorting(sortOption, directionOption)
-        return gameRepository.readAll(gameSorting)
+    async getAll(
+        sortOption: string,
+        directionOption: string,
+        limit: number,
+        offset: number
+    ) {
+        const gameSorting = new GameSorting(sortOption, directionOption)
+        return gameRepository.readAll(gameSorting, limit, offset)
     }
 
-    async getByTags(tagsIds: number[]) {
+    async getByIds(ids: number[]) {
+        const games = await gameRepository.readByIds(ids)
+        games.sort(function (a, b) {
+            return ids.indexOf(a.gameId) - ids.indexOf(b.gameId)
+        })
+        return games
+    }
+
+    async getByTags(
+        tagsIds: number[],
+        sortOption: string,
+        directionOption: string,
+        limit: number,
+        offset: number
+    ) {
+        const gameSorting = new GameSorting(sortOption, directionOption)
         const tags: Tag[] = await tagService.getAllByIds(tagsIds)
-        let allGames = tags[0].games
+        let games = tags[0].games
 
         for (let i = 1; i < tags.length; i++) {
             const tagGames = tags[i].games
-            allGames = allGames.filter(
+            games = games.filter(
                 ({ id }) => tagGames.findIndex((game) => game.id === id) > -1
             )
         }
 
-        return Array.from(allGames)
+        const gameIds = games.map((game) => game.gameId)
+
+        return gameRepository.readByIdsAndSort(
+            gameIds,
+            gameSorting,
+            limit,
+            offset
+        )
     }
 
     async create(

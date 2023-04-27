@@ -2,6 +2,7 @@ import { AppDataSource } from '../database/data-source'
 import { Game } from '../models/Game'
 import { Tag } from '../models/Tag'
 import { GameSorting } from './ISorting'
+import { In } from 'typeorm'
 
 const gameRepository = AppDataSource.getRepository(Game)
 
@@ -15,15 +16,45 @@ class GameRepository {
         })
     }
 
-    async readAll(gameSorting: GameSorting) {
+    async readByIds(ids: number[]) {
         return await gameRepository.find({
+            relations: {
+                tags: true,
+            },
+            where: {
+                gameId: In([...ids]),
+            },
+        })
+    }
+
+    async readByIdsAndSort(
+        ids: number[],
+        gameSorting: GameSorting,
+        limit: number,
+        offset: number
+    ) {
+        return await gameRepository.findAndCount({
+            where: {
+                gameId: In([...ids]),
+            },
+            order: {
+                [gameSorting.parameter]: gameSorting.direction,
+            },
+            take: limit,
+            skip: offset,
+        })
+    }
+
+    async readAll(gameSorting: GameSorting, limit: number, offset: number) {
+        return await gameRepository.findAndCount({
             relations: {
                 tags: true,
             },
             order: {
                 [gameSorting.parameter]: gameSorting.direction,
             },
-            take: 100,
+            take: limit,
+            skip: offset,
         })
     }
 

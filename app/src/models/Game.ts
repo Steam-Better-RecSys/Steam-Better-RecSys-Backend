@@ -21,11 +21,23 @@ export class Game {
     @Column()
     title: string
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     description: string
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     nameSlug: string
+
+    @Column()
+    reviews: number
+
+    @Column({
+        type: 'date',
+    })
+    releaseDate: string
 
     protected horizontalImageUrl: string
 

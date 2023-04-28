@@ -6,18 +6,20 @@ const router: express.Router = express.Router()
 
 const userController = new UserController()
 
-router.route('/').get(userController.getAllUsers)
+router
+    .route('/wishlist/:id')
+    .post(checkJWT, userController.addLikedGame)
 
 router
-    .route('/my_random_entities')
-    .get(checkJWT, userController.getMyLikedGames)
+    .route('/wishlist/:id')
+    .delete(checkJWT, userController.removeLikedGame)
 
 router
-    .route('/my_random_entities/:id')
-    .post(checkJWT, userController.addUserLikedGame)
+    .route('/blacklist/:id')
+    .post(checkJWT, userController.addDislikedGame)
 
 router
-    .route('/my_random_entities/:id')
-    .delete(checkJWT, userController.removeUserLikedGame)
+    .route('/blacklist/:id')
+    .delete(checkJWT, userController.addDislikedGame)
 
 export default router

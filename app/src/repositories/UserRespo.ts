@@ -15,7 +15,7 @@ class UserRepository {
         return await userRepository.findOneOrFail({
             select: ['id', 'username', 'password', 'tokenVersion'],
             relations: {
-                likesGames: true,
+                likedGames: true,
                 dislikedGames: true,
             },
             where: { username: username },
@@ -40,18 +40,18 @@ class UserRepository {
         return await userRepository.save(user)
     }
 
-    async updateUserLikedMovies(username: string, game: Game, add: boolean) {
+    async updateUserGames(username: string, game: Game, add: boolean, games: string) {
         const user = await this.readOneByUsername(username)
         if (add) {
             await userRepository
                 .createQueryBuilder()
-                .relation(User, 'likedMovies')
+                .relation(User, games)
                 .of(user)
                 .add(game)
         } else {
             await userRepository
                 .createQueryBuilder()
-                .relation(User, 'likedMovies')
+                .relation(User, games)
                 .of(user)
                 .remove(game)
         }

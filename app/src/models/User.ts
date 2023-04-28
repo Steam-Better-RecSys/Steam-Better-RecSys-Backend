@@ -26,7 +26,7 @@ export class User {
         cascade: true,
     })
     @JoinTable()
-    likesGames: Game[]
+    likedGames: Game[]
 
     @ManyToMany(() => Game, {
         cascade: true,

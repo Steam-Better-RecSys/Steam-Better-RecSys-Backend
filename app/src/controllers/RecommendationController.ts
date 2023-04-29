@@ -22,27 +22,54 @@ class RecommendationController {
         const vector = recommendationsData['vector']
 
         response.cookie('vector', vector)
+        response.cookie('recommendedGames', request.body['games_ids'])
 
         return response.send(recommendationsData)
     }
 
     getRecommendations = async (request: Request, response: Response) => {
-        const recommendations = await fetch(this.mlUrl + 'recommendations', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(request.cookies),
-        })
+        let gameIds = request.cookies['recommendedGames']
+        let recommendedGamesIds = []
+        let vector = 0
 
-        const recommendationsData = await recommendations.json()
+        let t = 0
+        try {
+            while (t < 10 && recommendedGamesIds.length < 10) {
+                const params = new URLSearchParams({
+                    offset: String(t * 10),
+                    limit: String((t + 1) * 10)
+                })
 
-        const vector = recommendationsData['vector']
-        const gameIds = recommendationsData['games']
+                const recommendations = await fetch(this.mlUrl + 'recommendations?' + params, {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(request.cookies),
+                })
+
+                const recommendationsData = await recommendations.json()
+                vector = recommendationsData['vector']
+
+                recommendedGamesIds.push(...recommendationsData['games'])
+                recommendedGamesIds = recommendedGamesIds.filter((id: number) => gameIds.indexOf(id) < 0)
+
+                t = t + 1
+            }
+        }
+        catch (e) {
+            recommendedGamesIds.push(730)
+        }
+
+        let games = []
+        for (let i = 0; i < Math.min(10, recommendedGamesIds.length); i++) {
+            const game = await gameService.getByGameId(recommendedGamesIds[i])
+            games.push(game)
+        }
 
         response.cookie('vector', vector)
-        const games = await gameService.getByIds(gameIds)
+        // TO-DO: update recommended games
 
         return response.send(games)
     }

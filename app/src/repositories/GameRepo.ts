@@ -16,6 +16,15 @@ class GameRepository {
         })
     }
 
+    async readByGameId(gameId: number) {
+        return await gameRepository.findOneOrFail({
+            relations: {
+                tags: false,
+            },
+            where: { gameId: gameId },
+        })
+    }
+
     async readByIds(ids: number[]) {
         return await gameRepository.find({
             relations: {

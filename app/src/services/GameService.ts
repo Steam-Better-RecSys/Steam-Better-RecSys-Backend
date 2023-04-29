@@ -11,6 +11,10 @@ class GameService {
         return gameRepository.readById(id)
     }
 
+    async getByGameId(gameId: number) {
+        return gameRepository.readByGameId(gameId)
+    }
+
     async getAll(
         sortOption: string,
         directionOption: string,

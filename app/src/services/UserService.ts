@@ -19,7 +19,12 @@ class UserService {
 
     async addLikedGame(username: string, gameId: number) {
         const game = await gameService.getById(gameId)
-        return userRepository.updateUserGames(username, game, true, 'likedGames')
+        return userRepository.updateUserGames(
+            username,
+            game,
+            true,
+            'likedGames'
+        )
     }
 
     async deleteLikedGame(username: string, gameId: number) {
@@ -34,12 +39,22 @@ class UserService {
 
     async addDislikedGame(username: string, gameId: number) {
         const game = await gameService.getById(gameId)
-        return userRepository.updateUserGames(username, game, true, 'dislikedGames')
+        return userRepository.updateUserGames(
+            username,
+            game,
+            true,
+            'dislikedGames'
+        )
     }
 
     async deleteDislikedGame(username: string, gameId: number) {
         const game = await gameService.getById(gameId)
-        return userRepository.updateUserGames(username, game, false, 'dislikedGames')
+        return userRepository.updateUserGames(
+            username,
+            game,
+            false,
+            'dislikedGames'
+        )
     }
 }
 

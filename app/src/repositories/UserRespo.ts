@@ -40,7 +40,12 @@ class UserRepository {
         return await userRepository.save(user)
     }
 
-    async updateUserGames(username: string, game: Game, add: boolean, games: string) {
+    async updateUserGames(
+        username: string,
+        game: Game,
+        add: boolean,
+        games: string
+    ) {
         const user = await this.readOneByUsername(username)
         if (add) {
             await userRepository

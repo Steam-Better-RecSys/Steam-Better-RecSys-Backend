@@ -54,8 +54,8 @@ class GameController {
 
     updateGame = async (request: Request, response: Response) => {
         const id = Number(request.params.id)
-        const { title } = request.body
-        const results = await gameService.update(id, title)
+        const { description } = request.body
+        const results = await gameService.update(id, description)
         return response.send(results)
     }
 

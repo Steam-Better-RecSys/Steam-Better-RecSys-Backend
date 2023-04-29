@@ -72,8 +72,8 @@ class GameService {
         return gameRepository.create(gameId, title, description, nameSlug, tags)
     }
 
-    async update(id: number, title: string) {
-        return gameRepository.update(id, title)
+    async update(id: number, description: string) {
+        return gameRepository.update(id, description)
     }
 
     async delete(id: number) {

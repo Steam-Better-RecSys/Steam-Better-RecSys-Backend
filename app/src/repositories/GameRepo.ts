@@ -83,9 +83,9 @@ class GameRepository {
         return await gameRepository.save(game)
     }
 
-    async update(id: number, title: string) {
+    async update(id: number, description: string) {
         const game = await this.readById(id)
-        game.title = title
+        game.description = description
         return await gameRepository.save(game)
     }
 

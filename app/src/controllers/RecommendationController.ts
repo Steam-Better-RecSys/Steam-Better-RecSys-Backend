@@ -8,6 +8,20 @@ const gameService = new GameService()
 class RecommendationController {
     mlUrl: string = String(process.env.ML_HOST)
 
+    test = async (request: Request, response: Response) => {
+        const recommendations = await fetch(this.mlUrl + 'test', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+
+        const recommendationsData = await recommendations.json()
+
+        return response.send(recommendationsData)
+    }
+
     setRecommendations = async (request: Request, response: Response) => {
         const recommendations = await fetch(this.mlUrl + 'selected_games', {
             method: 'POST',
@@ -37,28 +51,32 @@ class RecommendationController {
             while (t < 10 && recommendedGamesIds.length < 10) {
                 const params = new URLSearchParams({
                     offset: String(t * 10),
-                    limit: String((t + 1) * 10)
+                    limit: String((t + 1) * 10),
                 })
 
-                const recommendations = await fetch(this.mlUrl + 'recommendations?' + params, {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(request.cookies),
-                })
+                const recommendations = await fetch(
+                    this.mlUrl + 'recommendations?' + params,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(request.cookies),
+                    }
+                )
 
                 const recommendationsData = await recommendations.json()
                 vector = recommendationsData['vector']
 
                 recommendedGamesIds.push(...recommendationsData['games'])
-                recommendedGamesIds = recommendedGamesIds.filter((id: number) => gameIds.indexOf(id) < 0)
+                recommendedGamesIds = recommendedGamesIds.filter(
+                    (id: number) => gameIds.indexOf(id) < 0
+                )
 
                 t = t + 1
             }
-        }
-        catch (e) {
+        } catch (e) {
             recommendedGamesIds.push(730)
         }
 

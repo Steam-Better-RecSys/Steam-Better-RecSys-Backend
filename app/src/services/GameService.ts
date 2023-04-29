@@ -79,6 +79,10 @@ class GameService {
     async delete(id: number) {
         return gameRepository.delete(id)
     }
+
+    async updateByGameId(gameId: number, description: string) {
+        return gameRepository.updateByGameId(gameId, description)
+    }
 }
 
 export default GameService

@@ -15,4 +15,8 @@ router.route('/:id').delete(gameController.deleteGame)
 
 router.route('/:id').put(gameController.updateGame)
 
+router
+    .route('/description/:game_id')
+    .put(gameController.getGameDescriptionFromSteam)
+
 export default router

@@ -8,20 +8,6 @@ const gameService = new GameService()
 class RecommendationController {
     mlUrl: string = String(process.env.ML_HOST)
 
-    test = async (request: Request, response: Response) => {
-        const recommendations = await fetch(this.mlUrl + 'test', {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        })
-
-        const recommendationsData = await recommendations.json()
-
-        return response.send(recommendationsData)
-    }
-
     setRecommendations = async (request: Request, response: Response) => {
         const recommendations = await fetch(this.mlUrl + 'selected_games', {
             method: 'POST',

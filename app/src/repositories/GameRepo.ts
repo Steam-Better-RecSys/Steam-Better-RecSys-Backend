@@ -89,6 +89,12 @@ class GameRepository {
         return await gameRepository.save(game)
     }
 
+    async updateByGameId(gameId: number, description: string) {
+        const game = await this.readByGameId(gameId)
+        game.description = description
+        return await gameRepository.save(game)
+    }
+
     async delete(id: number) {
         const game = await this.readById(id)
         return await gameRepository.remove(game)

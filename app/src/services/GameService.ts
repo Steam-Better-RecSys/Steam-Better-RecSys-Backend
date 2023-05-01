@@ -2,6 +2,7 @@ import GameRepository from '../repositories/GameRepo'
 import TagService from './TagService'
 import { Tag } from '../models/Tag'
 import { GameSorting } from '../repositories/ISorting'
+import fetch from 'node-fetch'
 
 const gameRepository = new GameRepository()
 const tagService = new TagService()
@@ -30,6 +31,11 @@ class GameService {
         games.sort(function (a, b) {
             return ids.indexOf(a.gameId) - ids.indexOf(b.gameId)
         })
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].description == null) {
+                games[i] = await this.getDescriptionFromSteam(games[i].gameId)
+            }
+        }
         return games
     }
 
@@ -82,6 +88,31 @@ class GameService {
 
     async updateByGameId(gameId: number, description: string) {
         return gameRepository.updateByGameId(gameId, description)
+    }
+
+    async getDescriptionFromSteam(gameId: number) {
+        const steamData = await fetch(
+            'https://store.steampowered.com/api/appdetails?' +
+                new URLSearchParams({
+                    l: 'english',
+                    appids: String(gameId),
+                }),
+            {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+
+        const steamDataJson = await steamData.json()
+        let description = null
+        if (steamDataJson[gameId]['success'] == true) {
+            description = steamDataJson[gameId]['data']['short_description']
+        }
+
+        return await this.updateByGameId(gameId, description)
     }
 }
 

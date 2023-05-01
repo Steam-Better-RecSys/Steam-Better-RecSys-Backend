@@ -27,9 +27,6 @@ class GameRepository {
 
     async readByIds(ids: number[]) {
         return await gameRepository.find({
-            relations: {
-                tags: true,
-            },
             where: {
                 gameId: In([...ids]),
             },

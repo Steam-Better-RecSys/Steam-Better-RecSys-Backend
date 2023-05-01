@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import GameService from '../services/GameService'
 import Convertor from '../utils/Convertor'
-import fetch from 'node-fetch'
 
 const gameService = new GameService()
 const convertor = new Convertor()
@@ -63,33 +62,6 @@ class GameController {
     deleteGame = async (request: Request, response: Response) => {
         const id = Number(request.params.id)
         const results = await gameService.delete(id)
-        return response.send(results)
-    }
-
-    getGameDescriptionFromSteam = async (
-        request: Request,
-        response: Response
-    ) => {
-        const id = Number(request.params.game_id)
-        const steamData = await fetch(
-            'https://store.steampowered.com/api/appdetails?' +
-                new URLSearchParams({
-                    l: 'english',
-                    appids: String(id),
-                }),
-            {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
-
-        const steamDataJson = await steamData.json()
-        const description = steamDataJson[id]['data']['about_the_game']
-
-        const results = await gameService.updateByGameId(id, description)
         return response.send(results)
     }
 }

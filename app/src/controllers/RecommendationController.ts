@@ -28,7 +28,17 @@ class RecommendationController {
     }
 
     getRecommendations = async (request: Request, response: Response) => {
-        let gameIds = request.cookies['recommendedGames']
+        let alreadyRecommendedGames = request.cookies['recommendedGames']
+
+        let gameId = String(request.query.game_id) || '0'
+        let gameStatus = String(request.query.game_status) || '0'
+
+        if (gameId != '0') {
+            alreadyRecommendedGames += ' '
+            alreadyRecommendedGames += gameId
+            response.cookie('recommendedGames', alreadyRecommendedGames)
+        }
+
         let recommendedGamesIds = []
         let vector = 0
 
@@ -38,6 +48,8 @@ class RecommendationController {
                 const params = new URLSearchParams({
                     offset: String(t * 10),
                     limit: String((t + 1) * 10),
+                    liked: gameStatus,
+                    game_id: gameId,
                 })
 
                 const recommendations = await fetch(
@@ -57,25 +69,24 @@ class RecommendationController {
 
                 recommendedGamesIds.push(...recommendationsData['games'])
                 recommendedGamesIds = recommendedGamesIds.filter(
-                    (id: number) => gameIds.indexOf(id) < 0
+                    (id: number) => alreadyRecommendedGames.indexOf(id) < 0
                 )
 
                 t = t + 1
             }
+
+            recommendedGamesIds = recommendedGamesIds.slice(0, 10)
         } catch (e) {
             recommendedGamesIds.push(730)
         }
 
-        let games = []
-        for (let i = 0; i < Math.min(10, recommendedGamesIds.length); i++) {
-            const game = await gameService.getByGameId(recommendedGamesIds[i])
-            games.push(game)
+        const recommendedGames = await gameService.getByIds(recommendedGamesIds)
+
+        if (vector != 0) {
+            response.cookie('vector', vector)
         }
 
-        response.cookie('vector', vector)
-        // TO-DO: update recommended games
-
-        return response.send(games)
+        return response.send(recommendedGames)
     }
 }
 

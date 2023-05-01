@@ -28,7 +28,7 @@ class App {
     private createApp(): express.Application {
         const app = express()
 
-        app.use(cors())
+        app.use(cors({ origin: true, credentials: true }))
         app.use(cookieParser())
         app.use(express.urlencoded({ extended: true }))
         app.use(express.json())

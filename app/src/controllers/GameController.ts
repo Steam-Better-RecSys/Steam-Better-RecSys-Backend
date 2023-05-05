@@ -10,7 +10,7 @@ class GameController {
         const tagsQuery = request.query.tag
         const sortQuery = request.query.sort || 'title'
         const orderQuery = request.query.order || 'ASC'
-        const limitQuery = request.query.limit || 100
+        const limitQuery = request.query.limit || 150
         const offsetQuery = request.query.offset || 0
 
         if (tagsQuery) {

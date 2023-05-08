@@ -1,6 +1,7 @@
 import express from 'express'
 import cors = require('cors')
 import cookieParser = require('cookie-parser')
+import compression = require('compression');
 import { createServer, Server } from 'http'
 import users from '../routes/Users'
 import auth from '../routes/Auth'
@@ -32,6 +33,7 @@ class App {
         app.use(cookieParser())
         app.use(express.urlencoded({ extended: true }))
         app.use(express.json())
+        app.use(compression())
 
         app.use('/users', users)
         app.use('/auth', auth)

@@ -39,26 +39,6 @@ export class Game {
     })
     releaseDate: string
 
-    protected horizontalImageUrl: string
-
-    protected verticalImageUrl: string
-
-    @AfterLoad()
-    getHorizontalImageUrl() {
-        this.horizontalImageUrl =
-            'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
-            String(this.gameId) +
-            '/header.jpg'
-    }
-
-    @AfterLoad()
-    getVerticalImageUrl() {
-        this.verticalImageUrl =
-            'https://cdn.cloudflare.steamstatic.com/steam/apps/' +
-            String(this.gameId) +
-            '/library_600x900.jpg'
-    }
-
     @ManyToMany((type) => Tag, (tag) => tag.games, {
         cascade: true,
     })

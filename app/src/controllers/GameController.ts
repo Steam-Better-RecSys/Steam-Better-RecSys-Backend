@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 import GameService from '../services/GameService'
 import Convertor from '../utils/Convertor'
+import StringClean from '../utils/StringClean'
 
 const gameService = new GameService()
 const convertor = new Convertor()
+const stringClean = new StringClean()
 
 class GameController {
     getAllGames = async (request: Request, response: Response) => {
@@ -12,6 +14,11 @@ class GameController {
         const orderQuery = request.query.order || 'ASC'
         const limitQuery = request.query.limit || 50
         const offsetQuery = request.query.offset || 0
+        let searchQuery = request.query.search || '%'
+
+        if (searchQuery != '%') {
+            searchQuery = stringClean.cleanString(String(searchQuery))
+        }
 
         if (tagsQuery) {
             const tagsIds = convertor.convertQueryToNumbers(tagsQuery)
@@ -20,7 +27,8 @@ class GameController {
                 String(sortQuery),
                 String(orderQuery),
                 Number(limitQuery),
-                Number(offsetQuery)
+                Number(offsetQuery),
+                searchQuery
             )
             return response.send(allGames)
         } else {
@@ -28,7 +36,8 @@ class GameController {
                 String(sortQuery),
                 String(orderQuery),
                 Number(limitQuery),
-                Number(offsetQuery)
+                Number(offsetQuery),
+                searchQuery
             )
             return response.send(allGames)
         }

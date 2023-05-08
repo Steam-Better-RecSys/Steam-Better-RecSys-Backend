@@ -20,10 +20,11 @@ class GameService {
         sortOption: string,
         directionOption: string,
         limit: number,
-        offset: number
+        offset: number,
+        searchString: string
     ) {
         const gameSorting = new GameSorting(sortOption, directionOption)
-        return gameRepository.readAll(gameSorting, limit, offset)
+        return gameRepository.readAll(gameSorting, limit, offset, searchString)
     }
 
     async getByIds(ids: number[]) {
@@ -44,7 +45,8 @@ class GameService {
         sortOption: string,
         directionOption: string,
         limit: number,
-        offset: number
+        offset: number,
+        searchString: string
     ) {
         const gameSorting = new GameSorting(sortOption, directionOption)
         const tags: Tag[] = await tagService.getAllByIds(tagsIds)
@@ -59,8 +61,9 @@ class GameService {
 
         const gameIds = games.map((game) => game.gameId)
 
-        return gameRepository.readByIdsAndSort(
+        return gameRepository.readByIdsAndSearchStringWithSorting(
             gameIds,
+            searchString,
             gameSorting,
             limit,
             offset

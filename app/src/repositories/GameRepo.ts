@@ -2,7 +2,7 @@ import { AppDataSource } from '../database/data-source'
 import { Game } from '../models/Game'
 import { Tag } from '../models/Tag'
 import { GameSorting } from './ISorting'
-import { In } from 'typeorm'
+import { In, Like } from 'typeorm'
 
 const gameRepository = AppDataSource.getRepository(Game)
 
@@ -33,8 +33,9 @@ class GameRepository {
         })
     }
 
-    async readByIdsAndSort(
+    async readByIdsAndSearchStringWithSorting(
         ids: number[],
+        searchString: string,
         gameSorting: GameSorting,
         limit: number,
         offset: number
@@ -42,6 +43,7 @@ class GameRepository {
         return await gameRepository.findAndCount({
             where: {
                 gameId: In([...ids]),
+                nameSlug: Like(searchString),
             },
             order: {
                 [gameSorting.parameter]: gameSorting.direction,
@@ -51,10 +53,15 @@ class GameRepository {
         })
     }
 
-    async readAll(gameSorting: GameSorting, limit: number, offset: number) {
+    async readAll(
+        gameSorting: GameSorting,
+        limit: number,
+        offset: number,
+        search: string
+    ) {
         return await gameRepository.findAndCount({
-            relations: {
-                tags: true,
+            where: {
+                nameSlug: Like(search),
             },
             order: {
                 [gameSorting.parameter]: gameSorting.direction,

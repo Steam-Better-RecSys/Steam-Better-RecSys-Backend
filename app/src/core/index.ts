@@ -35,7 +35,7 @@ class App {
         app.use(express.json())
         app.use(
             compression({
-                level: 6,
+                level: 7,
             })
         )
 

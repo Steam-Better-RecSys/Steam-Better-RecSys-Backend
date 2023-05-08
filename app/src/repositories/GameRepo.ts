@@ -41,6 +41,12 @@ class GameRepository {
         offset: number
     ) {
         return await gameRepository.findAndCount({
+            select: {
+                id: true,
+                gameId: true,
+                title: true,
+                nameSlug: true,
+            },
             where: {
                 gameId: In([...ids]),
                 nameSlug: Like(searchString),
@@ -60,6 +66,12 @@ class GameRepository {
         search: string
     ) {
         return await gameRepository.findAndCount({
+            select: {
+                id: true,
+                gameId: true,
+                title: true,
+                nameSlug: true,
+            },
             where: {
                 nameSlug: Like(search),
             },

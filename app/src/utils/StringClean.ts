@@ -1,7 +1,7 @@
 class StringClean {
     cleanString(s: string) {
-        s = s.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '%_')
-        s = '%_' + s + '%'
+        s = s.toLowerCase().replace(/[^a-zA-Z0-9]+/g, '%')
+        s = '%' + s + '%'
         return s
     }
 }

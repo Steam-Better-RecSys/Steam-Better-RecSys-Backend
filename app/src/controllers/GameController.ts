@@ -14,10 +14,13 @@ class GameController {
         const orderQuery = request.query.order || 'ASC'
         const limitQuery = request.query.limit || 50
         const offsetQuery = request.query.offset || 0
-        let searchQuery = request.query.search || '%'
+        let searchQuery = request.query.search
 
-        if (searchQuery != '%') {
+        if (searchQuery) {
             searchQuery = stringClean.cleanString(String(searchQuery))
+        }
+        else {
+            searchQuery = '%'
         }
 
         if (tagsQuery) {

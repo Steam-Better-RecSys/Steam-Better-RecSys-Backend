@@ -18,8 +18,7 @@ class GameController {
 
         if (searchQuery) {
             searchQuery = stringClean.cleanString(String(searchQuery))
-        }
-        else {
+        } else {
             searchQuery = '%'
         }
 

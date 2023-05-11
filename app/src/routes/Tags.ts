@@ -9,6 +9,8 @@ router.route('/').get(tagController.getAllTags)
 
 router.route('/:id').get(tagController.getTag)
 
+/*
 router.route('/').post(tagController.createTag)
+ */
 
 export default router

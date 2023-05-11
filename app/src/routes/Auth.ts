@@ -6,9 +6,11 @@ const router: express.Router = express.Router()
 
 const authController = new AuthController()
 
+/*
 router.route('/login').post(authController.login)
 
 router.route('/signup').post(authController.signup)
+*/
 
 router.route('/me').get(checkJWT, authController.me)
 

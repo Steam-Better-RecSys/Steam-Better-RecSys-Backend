@@ -33,38 +33,25 @@ class GameRepository {
         })
     }
 
-    async readByIdsAndSearchStringWithSorting(
+    async readByIdsAndCount(
         ids: number[],
-        searchString: string,
-        gameSorting: GameSorting,
         limit: number,
-        offset: number
+        offset: number,
+        gameSorting: GameSorting
     ) {
         return await gameRepository.findAndCount({
-            select: {
-                id: true,
-                gameId: true,
-                title: true,
-                nameSlug: true,
-            },
             where: {
                 gameId: In([...ids]),
-                nameSlug: Like(searchString),
-            },
-            order: {
-                [gameSorting.parameter]: gameSorting.direction,
             },
             take: limit,
             skip: offset,
+            order: {
+                [gameSorting.parameter]: gameSorting.direction,
+            },
         })
     }
 
-    async readAll(
-        gameSorting: GameSorting,
-        limit: number,
-        offset: number,
-        search: string
-    ) {
+    async readAll(search: string) {
         return await gameRepository.findAndCount({
             select: {
                 id: true,
@@ -75,11 +62,6 @@ class GameRepository {
             where: {
                 nameSlug: Like(search),
             },
-            order: {
-                [gameSorting.parameter]: gameSorting.direction,
-            },
-            take: limit,
-            skip: offset,
         })
     }
 

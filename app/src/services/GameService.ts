@@ -16,7 +16,8 @@ class GameService {
         return gameRepository.readByGameId(gameId)
     }
 
-    async getAll(
+    async getFilteredGames(
+        tagsIds: number[] | null,
         sortOption: string,
         directionOption: string,
         limit: number,
@@ -24,7 +25,29 @@ class GameService {
         searchString: string
     ) {
         const gameSorting = new GameSorting(sortOption, directionOption)
-        return gameRepository.readAll(gameSorting, limit, offset, searchString)
+        let gamesWithCount = await gameRepository.readAll(searchString)
+        let games = gamesWithCount[0]
+
+        if (tagsIds) {
+            const tags: Tag[] = await tagService.getAllByIds(tagsIds)
+            for (let i = 0; i < tags.length; i++) {
+                const tagGames = tags[i].games
+                games = games.filter(
+                    ({ id }) =>
+                        tagGames.findIndex((game) => game.id === id) > -1
+                )
+            }
+        }
+
+        const ids = games.map((game) => game.gameId)
+        gamesWithCount = await gameRepository.readByIdsAndCount(
+            ids,
+            limit,
+            offset,
+            gameSorting
+        )
+
+        return gamesWithCount
     }
 
     async getByIds(ids: number[]) {
@@ -38,36 +61,6 @@ class GameService {
             }
         }
         return games
-    }
-
-    async getByTags(
-        tagsIds: number[],
-        sortOption: string,
-        directionOption: string,
-        limit: number,
-        offset: number,
-        searchString: string
-    ) {
-        const gameSorting = new GameSorting(sortOption, directionOption)
-        const tags: Tag[] = await tagService.getAllByIds(tagsIds)
-        let games = tags[0].games
-
-        for (let i = 1; i < tags.length; i++) {
-            const tagGames = tags[i].games
-            games = games.filter(
-                ({ id }) => tagGames.findIndex((game) => game.id === id) > -1
-            )
-        }
-
-        const gameIds = games.map((game) => game.gameId)
-
-        return gameRepository.readByIdsAndSearchStringWithSorting(
-            gameIds,
-            searchString,
-            gameSorting,
-            limit,
-            offset
-        )
     }
 
     async create(

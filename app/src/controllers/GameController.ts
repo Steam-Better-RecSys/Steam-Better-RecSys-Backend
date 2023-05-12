@@ -15,6 +15,7 @@ class GameController {
         const limitQuery = request.query.limit || 50
         const offsetQuery = request.query.offset || 0
         let searchQuery = request.query.search
+        let usernameQuery = request.query.username
 
         if (searchQuery) {
             searchQuery = stringClean.cleanString(String(searchQuery))
@@ -22,27 +23,25 @@ class GameController {
             searchQuery = '%'
         }
 
-        if (tagsQuery) {
-            const tagsIds = convertor.convertQueryToNumbers(tagsQuery)
-            const allGames = await gameService.getByTags(
-                tagsIds,
-                String(sortQuery),
-                String(orderQuery),
-                Number(limitQuery),
-                Number(offsetQuery),
-                searchQuery
-            )
-            return response.send(allGames)
-        } else {
-            const allGames = await gameService.getAll(
-                String(sortQuery),
-                String(orderQuery),
-                Number(limitQuery),
-                Number(offsetQuery),
-                searchQuery
-            )
-            return response.send(allGames)
+        if (usernameQuery) {
+            usernameQuery = stringClean.clearUsername(String(usernameQuery))
         }
+
+        let tagsIds = null
+        if (tagsQuery) {
+            tagsIds = convertor.convertQueryToNumbers(tagsQuery)
+        }
+
+        const allGames = await gameService.getFilteredGames(
+            tagsIds,
+            String(sortQuery),
+            String(orderQuery),
+            Number(limitQuery),
+            Number(offsetQuery),
+            searchQuery
+        )
+
+        return response.send(allGames)
     }
 
     getGame = async (request: Request, response: Response) => {

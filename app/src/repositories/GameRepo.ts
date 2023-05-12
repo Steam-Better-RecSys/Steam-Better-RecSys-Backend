@@ -43,11 +43,11 @@ class GameRepository {
             where: {
                 gameId: In([...ids]),
             },
-            take: limit,
-            skip: offset,
             order: {
                 [gameSorting.parameter]: gameSorting.direction,
             },
+            take: limit,
+            skip: offset,
         })
     }
 

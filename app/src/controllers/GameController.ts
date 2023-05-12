@@ -24,7 +24,9 @@ class GameController {
         }
 
         if (usernameQuery) {
-            usernameQuery = stringClean.clearUsername(String(usernameQuery))
+            usernameQuery = String(usernameQuery).trim()
+        } else {
+            usernameQuery = ''
         }
 
         let tagsIds = null
@@ -38,7 +40,8 @@ class GameController {
             String(orderQuery),
             Number(limitQuery),
             Number(offsetQuery),
-            searchQuery
+            searchQuery,
+            usernameQuery
         )
 
         return response.send(allGames)

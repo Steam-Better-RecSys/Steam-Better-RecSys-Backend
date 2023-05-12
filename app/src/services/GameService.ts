@@ -3,9 +3,11 @@ import TagService from './TagService'
 import { Tag } from '../models/Tag'
 import { GameSorting } from '../repositories/ISorting'
 import fetch from 'node-fetch'
+import SteamService from './SteamService'
 
 const gameRepository = new GameRepository()
 const tagService = new TagService()
+const steamService = new SteamService()
 
 class GameService {
     async getById(id: number) {
@@ -22,7 +24,8 @@ class GameService {
         directionOption: string,
         limit: number,
         offset: number,
-        searchString: string
+        searchString: string,
+        usernameString: string
     ) {
         const gameSorting = new GameSorting(sortOption, directionOption)
         let gamesWithCount = await gameRepository.readAll(searchString)
@@ -39,7 +42,41 @@ class GameService {
             }
         }
 
+        if (usernameString != '') {
+            let userId
+            if (usernameString.startsWith('https://steamcommunity.com/id/')) {
+                usernameString = usernameString
+                    .split('/')
+                    .filter((item) => item)
+                    .slice(-1)[0]
+                userId = await steamService.GetSteamID(usernameString)
+            } else if (
+                usernameString.startsWith(
+                    'https://steamcommunity.com/profiles/'
+                )
+            ) {
+                userId = usernameString
+                    .split('/')
+                    .filter((item) => item)
+                    .slice(-1)[0]
+            } else {
+                userId = await steamService.GetSteamID(usernameString)
+            }
+            if (userId) {
+                const userGames = await steamService.GetUserGames(userId)
+                if (userGames) {
+                    games = games.filter(
+                        ({ gameId }) =>
+                            userGames.findIndex(
+                                (game) => game.appid === gameId
+                            ) > -1
+                    )
+                }
+            }
+        }
+
         const ids = games.map((game) => game.gameId)
+
         gamesWithCount = await gameRepository.readByIdsAndCount(
             ids,
             limit,

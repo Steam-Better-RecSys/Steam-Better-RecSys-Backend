@@ -34,17 +34,22 @@ class GameController {
             tagsIds = convertor.convertQueryToNumbers(tagsQuery)
         }
 
-        const allGames = await gameService.getFilteredGames(
-            tagsIds,
-            String(sortQuery),
-            String(orderQuery),
-            Number(limitQuery),
-            Number(offsetQuery),
-            searchQuery,
-            usernameQuery
-        )
+        try {
+            const allGames = await gameService.getFilteredGames(
+                tagsIds,
+                String(sortQuery),
+                String(orderQuery),
+                Number(limitQuery),
+                Number(offsetQuery),
+                searchQuery,
+                usernameQuery
+            )
 
-        return response.send(allGames)
+            return response.send(allGames)
+        }
+        catch (e) {
+            response.status(500).json('Server Error')
+        }
     }
 
     getGame = async (request: Request, response: Response) => {

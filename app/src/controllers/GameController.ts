@@ -10,8 +10,8 @@ const stringClean = new StringClean()
 class GameController {
     getAllGames = async (request: Request, response: Response) => {
         const tagsQuery = request.query.tag
-        const sortQuery = request.query.sort || 'title'
-        const orderQuery = request.query.order || 'ASC'
+        const sortQuery = request.query.sort || 'reviews'
+        const orderQuery = request.query.order || 'DESC'
         const limitQuery = request.query.limit || 50
         const offsetQuery = request.query.offset || 0
         let searchQuery = request.query.search

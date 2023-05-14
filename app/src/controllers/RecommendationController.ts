@@ -44,7 +44,7 @@ class RecommendationController {
 
         let t = 0
         try {
-            while (t < 10 && recommendedGamesIds.length < 10) {
+            while (t < 100 && recommendedGamesIds.length < 10) {
                 const params = new URLSearchParams({
                     offset: String(t * 10),
                     limit: String((t + 1) * 10),

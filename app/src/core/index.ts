@@ -46,8 +46,8 @@ class App {
         app.use('/classes', tagClasses)
         app.use('/recommendations', recommendations)
 
-        app.get('/', (request, response) => {
-            response.send('{health_check: OK}')
+        app.get('/health', (request, response) => {
+            response.json({"status": "up"})
         })
 
         return app

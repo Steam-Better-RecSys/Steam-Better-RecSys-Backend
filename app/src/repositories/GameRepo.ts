@@ -70,6 +70,8 @@ class GameRepository {
         title: string,
         description: string,
         nameSlug: string,
+        reviews: number,
+        releaseDate: string,
         tags: Tag[]
     ) {
         const game = new Game()
@@ -77,6 +79,8 @@ class GameRepository {
         game.title = title
         game.description = description
         game.nameSlug = nameSlug
+        game.reviews = reviews
+        game.releaseDate = releaseDate
         game.tags = tags
         return await gameRepository.save(game)
     }

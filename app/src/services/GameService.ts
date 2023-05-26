@@ -105,10 +105,20 @@ class GameService {
         title: string,
         description: string,
         nameSlug: string,
+        reviews: number,
+        releaserDate: string,
         tagsIds: number[]
     ) {
         const tags = await tagService.getAllByIds(tagsIds, false)
-        return gameRepository.create(gameId, title, description, nameSlug, tags)
+        return gameRepository.create(
+            gameId,
+            title,
+            description,
+            nameSlug,
+            reviews,
+            releaserDate,
+            tags
+        )
     }
 
     async update(id: number, description: string) {

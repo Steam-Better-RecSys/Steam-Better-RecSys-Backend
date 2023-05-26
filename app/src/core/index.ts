@@ -47,7 +47,7 @@ class App {
         app.use('/recommendations', recommendations)
 
         app.get('/health', (request, response) => {
-            response.json({"status": "up"})
+            response.json({ status: 'up' })
         })
 
         return app

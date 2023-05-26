@@ -53,12 +53,22 @@ class GameController {
     }
 
     createGame = async (request: Request, response: Response) => {
-        const { gameId, title, description, nameSlug, tags } = request.body
+        const {
+            gameId,
+            title,
+            description,
+            nameSlug,
+            reviews,
+            releaseDate,
+            tags,
+        } = request.body
         const results = await gameService.create(
             gameId,
             title,
             description,
             nameSlug,
+            reviews,
+            releaseDate,
             tags
         )
         return response.send(results)

@@ -3,12 +3,15 @@ import cors = require('cors')
 import cookieParser = require('cookie-parser')
 import compression = require('compression')
 import { createServer, Server } from 'http'
-import users from '../routes/Users'
-import auth from '../routes/Auth'
-import games from '../routes/Games'
-import tags from '../routes/Tags'
-import recommendations from '../routes/Recommendations'
-import tagClasses from '../routes/TagClasses'
+import {
+    Recommendations,
+    Reviews,
+    Auth,
+    Users,
+    Games,
+    Tags,
+    TagClasses,
+} from '../routes'
 import { AppDataSource } from '../database/data-source'
 
 class App {
@@ -39,12 +42,13 @@ class App {
             })
         )
 
-        app.use('/users', users)
-        app.use('/auth', auth)
-        app.use('/games', games)
-        app.use('/tags', tags)
-        app.use('/classes', tagClasses)
-        app.use('/recommendations', recommendations)
+        app.use('/users', Users)
+        app.use('/auth', Auth)
+        app.use('/games', Games)
+        app.use('/tags', Tags)
+        app.use('/classes', TagClasses)
+        app.use('/recommendations', Recommendations)
+        app.use('/reviews', Reviews)
 
         app.get('/health', (request, response) => {
             response.json({ status: 'up' })

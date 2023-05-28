@@ -1,0 +1,7 @@
+export { default as Auth } from './Auth'
+export { default as Users } from './Users'
+export { default as Games } from './Games'
+export { default as Tags } from './Tags'
+export { default as TagClasses } from './TagClasses'
+export { default as Recommendations } from './Recommendations'
+export { default as Reviews } from './Reviews'

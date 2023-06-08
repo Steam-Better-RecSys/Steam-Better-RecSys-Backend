@@ -9,4 +9,6 @@ router.route('/').get(recommendationsController.getRecommendations)
 
 router.route('/').post(recommendationsController.setRecommendations)
 
+router.route('/mobile').post(recommendationsController.getRecommendations)
+
 export default router
